@@ -1,3 +1,4 @@
 test_data.pkl
 train_data.pkl
 training_log.txt
+__pycache__
