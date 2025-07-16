@@ -1,5 +1,5 @@
 test_data.pkl
-train_data.pkl
+train_data_*.pkl
 training_log.txt
 __pycache__
 log_test.txt

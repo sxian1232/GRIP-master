@@ -151,7 +151,7 @@ def generate_test_data(pra_file_path):
 	return all_feature_list, all_adjacency_list, all_mean_list
 
 
-def generate_data(pra_file_path_list, pra_is_train=True):
+def generate_data(pra_file_path_list, pra_is_train=True, train_data_size=None):
 	all_data = []
 	all_adjacency = []
 	all_mean_xy = []
@@ -173,10 +173,10 @@ def generate_data(pra_file_path_list, pra_is_train=True):
 	print(np.shape(all_data), np.shape(all_adjacency), np.shape(all_mean_xy))
 
 	# save training_data and trainjing_adjacency into a file.
-	if pra_is_train:
-		save_path = 'train_data.pkl'
+	if pra_is_train and train_data_size is not None:
+		save_path = f'train_data_{train_data_size}.pkl'
 	else:
-		save_path = 'test_data.pkl'
+		save_path = 'train_data.pkl' if pra_is_train else 'test_data.pkl'
 	with open(save_path, 'wb') as writer:
 		pickle.dump([all_data, all_adjacency, all_mean_xy], writer)
 
@@ -185,8 +185,32 @@ if __name__ == '__main__':
 	train_file_path_list = sorted(glob.glob(os.path.join(data_root, 'prediction_train/*.txt')))
 	test_file_path_list = sorted(glob.glob(os.path.join(data_root, 'prediction_test/*.txt')))
 
-	print('Generating Training Data.')
-	generate_data(train_file_path_list, pra_is_train=True)
+	# generate different size of training sets
+	np.random.seed(42)
+	train_file_path_list_10 = np.random.choice(train_file_path_list, size=10, replace=False)
+	train_file_path_list_20 = np.random.choice(train_file_path_list, size=20, replace=False)
+	train_file_path_list_30 = np.random.choice(train_file_path_list, size=30, replace=False)
+	train_file_path_list_40 = np.random.choice(train_file_path_list, size=40, replace=False)
+	train_file_path_list_50 = np.random.choice(train_file_path_list, size=50, replace=False)
+	train_file_path_list_53 = train_file_path_list
+
+	print('Generating Training Data for size 10.')
+	generate_data(train_file_path_list_10, pra_is_train=True, train_data_size=10)
+
+	print('Generating Training Data for size 20.')
+	generate_data(train_file_path_list_20, pra_is_train=True, train_data_size=20)
+
+	print('Generating Training Data for size 30.')
+	generate_data(train_file_path_list_30, pra_is_train=True, train_data_size=30)
+
+	print('Generating Training Data for size 40.')
+	generate_data(train_file_path_list_40, pra_is_train=True, train_data_size=40)
+
+	print('Generating Training Data for size 50.')
+	generate_data(train_file_path_list_50, pra_is_train=True, train_data_size=50)
+
+	print('Generating Training Data for size 53 (All).')
+	generate_data(train_file_path_list_53, pra_is_train=True, train_data_size=53)
 	
 	print('Generating Testing Data.')
 	generate_data(test_file_path_list, pra_is_train=False)
