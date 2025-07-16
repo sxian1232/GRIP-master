@@ -62,7 +62,7 @@ class Seq2Seq(nn.Module):
 
 		outputs = torch.zeros(batch_size, self.pred_length, out_dim)
 		if self.isCuda:
-			outputs = outputs.cuda()
+			outputs = outputs.to(in_data.device)
 
 		encoded_output, hidden = self.encoder(in_data)
 		decoder_input = last_location
